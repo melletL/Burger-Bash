@@ -11,18 +11,22 @@ body{
 	visibility: visible;
 }
 
-#pulse {
-	width:1024px;
-	height:768px;
-	border: 2px solid white;
+#pulse1 {
 	z-index: 1;
-	visibility: hidden;
+	border: 3px solid white;
 }
 
-#pulseFever {
-	width:1024px;
-	height:768px;
-	border: 3px solid red;
+#pulse2 {
 	z-index: 1;
-	visibility: hidden;
+	border: 1px solid white;
+}
+
+#pulse3 {
+	z-index: 1;
+	border: 5px solid red;
+}
+
+#pulse4 {
+	z-index: 1;
+	border: 2px solid red;
 }

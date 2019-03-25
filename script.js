@@ -1,104 +1,213 @@
-var times= [];
 var playerSequence = [];
-var playerTiming = [];
 var fever = false;
+var pulseCounter = 1;
 
-var kindle = String.fromCharCode(75);
-var ladle = String.fromCharCode(76);
-var cleaver = String.fromCharCode(67);
-var pan = String.fromCharCode(65);
+var A = String.fromCharCode(65);
+var S = String.fromCharCode(83);
+var K = String.fromCharCode(75);
+var L = String.fromCharCode(76);
 
 var moveBook = [
 {
     moveName: "increase the temperature!",
-    keyStroke: [kindle,kindle,kindle,kindle],
-    timing: [0,750,1500,2250],
+    keyStroke: [A,A,A,A],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: false,
 },
 {
     moveName: "light the fire!!",
-    keyStroke: [kindle,kindle,kindle,kindle,kindle,kindle,kindle,kindle],
-    timing: [0,375,750,1125,1500,1875,2250,2625],
+    keyStroke: [A,A,A,A],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: true,
 },
 {
     moveName: "stir the soup! decrease the temperature",
-    keyStroke: [ladle,ladle,ladle,ladle],
-    timing: [0,1125,1500,2625],
-}
+    keyStroke: [L,L,L,L],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: false,
+},
 {
     moveName: "dinner is served!!",
-    keyStroke: [ladle,ladle,ladle,ladle,ladle,ladle,ladle],
-    timing: [0,375,563,750,1125,1875,2250],
+    keyStroke: [L,A,L,A],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: true,
 },
 {
     moveName: "chop the ingredients!",
-    keyStroke: [cleaver,cleaver,cleaver,cleaver,cleaver],
-    timing:[0,750,1500,2000,2500],
+    keyStroke: [K,K,K,K],
+    referenceTiming:[0,750,1500,2250],
+    feverRequired: false,
 },
 {
     moveName: "add the ingredients!",
-    keyStroke: [cleaver,ladle,ladle,cleaver,cleaver,cleaver],
-    timing: [0,750,1125,1500,2000,2500],
+    keyStroke: [A,S,K,A],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: true,
 },
 {
     moveName: "season the ingredients!",
-    keyStroke: [pan,pan,pan,pan],
-    timing: [0,1125,1875,2250],
+    keyStroke: [L,L,L,L],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: false,
 },
 {
     moveName: "give the ingredients a toss!",
-    keyStroke: [kindle,ladle,clean,pan],
-    timing: [2625,2625,2625,2625],
+    keyStroke: [A,S,K,L],
+    referenceTiming: [0,750,1500,2250],
+    feverRequired: true,
 }
 ]
 
-//game start
-var startPulse = setInterval(function(){
-    if (fever === false) {
-        document.getElementById("pulse").style.visibility = "visible";
-        setTimeout(function() {
-            document.getElementById("pulse").style.visibility = "hidden";
-        }, 325);
-    } else if (fever === true){
-        document.getElementById("pulseFever").style.visibility = "visible";
-        setTimeout(function() {
-            document.getElementById("pulseFever").style.visibility = "hidden";
-        }, 325);
-    }
-}, 750);
-//consider adding 2 states for fever, add animations
-
-var checkSequence =function() {
-//check sequence
-    for (var i=0; i<moveBook.length; i++){
-        if(times[0] === moveBook.keyStroke[i]){
-            //push i
-        }
-    }
-//check timing (either perfect, normal, or miss)
-//if perfect, engage fever
-//if normal x 4, engage fever
-//if miss, count goes back to 0
-
-//launch appropriate sequence
-
-//clear player sequence
-    times = [];
+// recording keystrokes
+var listener = function () {
+    var recordListen = document.addEventListener("keydown",function(evt) {
+        playerSequence.push({"keyStroke":evt.which,"timeStamp":Math.round(evt.timeStamp)});
+    })
 }
 
-// recording keystrokes
-var record = document.addEventListener("keydown",function(evt) {
-    times.push({"timestamp":evt.timeStamp,"keystroke":evt.which});
-    console.log(times);//can remove this line subsequently
-//create player sequence
-//create player timing
-//create cutoff timings
-//make sure loop restarts
-    if (times.length == 4){
+listener();
+
+//comparing sequence
+// var checkSequence =function() {
+//     var playerKeystrokeMatch = [];
+//     var firstKeystroke = [];
+//     var restKeystroke = [];
+//     var moveMatched = "";
+//     var moveDeviationTotal = [];
+//     var DeviationAll = "";
+// //do the keystrokes match?
+//     for (var i=0; i<moveBook.length; i++){
+//         for(var j=0; playerSequence.keyStroke.length; j++) {
+//             if(playerSequence.keyStroke[j] === moveBook[i].keyStroke[j]){
+//                 moveMatched = i
+//                 var playerKeystrokeMatch = true;
+//             } else {
+//                 var playerKeystrokeMatch = false;
+//             }
+//         }
+//     }
+// //does the first timings match?
+//     var remainder = playerSequence[0]%750
+//     if(remainder >= 730 || remainder <= 20) {
+//         firstKeystroke = "perfect";
+//     } else if (remainder >= 600 || remainder <= 150) {
+//         firstKeystroke = "ok";
+//     } else {
+//         firstKeystroke = "miss";
+//     }
+// // //do the rest of the timings match?
+//     for (var i=playerSequence.timeStamp.length-1; i=0; i--){
+//         playerSequence.timeStamp[i] = playerSequence.timeStamp[i] - playerSequence.timeStamp[0];
+//         var moveDeviation = playerSequence.timestamp[i] - moveBook[moveMatched][i];
+//         if (moveDeviation+remainder >= 730 || moveDeviation+remainder <= 20) {
+//             moveDeviationTotal.push("perfect");
+//         } else if (moveDeviation+remainder >= 600 || moveDeviation+remainder <= 150) {
+//             moveDeviationTotal.push("ok");
+//         } else {
+//             moveDeviationTotal.push("miss");
+//         }
+//     }
+//     function isPerfect(value){
+//         return value === "perfect";
+//     }
+//     deviationAll = moveDeviationTotal.every(isPerfect);
+// //evaluating all three conditions
+//     if(firstKeystroke === "perfect" && deviationAll === true){
+//         fever = true;
+//     } else if ()
+
+//     }
+
+
+// function isBelowThreshold(currentValue) {
+//   return currentValue < 40;
+// }
+
+// var array1 = [1, 30, 39, 29, 10, 13];
+
+// console.log(array1.every(isBelowThreshold));
+// // expected output: true
+
+
+
+// }
+
+
+//pulse
+var sequence1 = function () {
+    document.getElementsByClassName('playingCanvas')[0].id = 'pulse1';
+    $("#pulse1").fadeIn(1);
+    $("#pulse1").fadeOut(500);
+}
+
+var sequence2 = function () {
+    document.getElementsByClassName('playingCanvas')[0].id = 'pulse2';
+    $("#pulse2").fadeIn(1);
+    $("#pulse2").fadeOut(500);
+}
+
+var sequence3 = function () {
+    document.getElementsByClassName('playingCanvas')[0].id = 'pulse3';
+    $("#pulse3").fadeIn(1);
+    $("#pulse3").fadeOut(500);
+}
+
+var sequence4 = function () {
+    document.getElementsByClassName('playingCanvas')[0].id = 'pulse4';
+    $("#pulse4").fadeIn(1);
+    $("#pulse4").fadeOut(500);
+}
+
+var startPulse = setInterval (function() {
+    if(pulseCounter === 1 && fever === false){
+        playerSequence = [];
+        sequence1();
+        pulseCounter++
+    } else if (pulseCounter ===2 && fever === false ) {
+        sequence2();
+        pulseCounter++;
+    } else if (pulseCounter ===3 && fever === false ) {
+        sequence2();
+        pulseCounter++;
+    } else if (pulseCounter === 4 && fever === false) {
+        sequence2();
+        pulseCounter=1;
+        console.log(playerSequence);
+        // checkSequence();
+    } else if (pulseCounter === 1 && fever === true) {
+        playerSequence = [];
+        sequence3();
+        pulseCounter++
+    } else if (pulseCounter ===2 && fever === true ) {
+        sequence4();
+        pulseCounter++;
+    } else if (pulseCounter ===3 && fever === true ) {
+        sequence4();
+        pulseCounter++;
+    } else if (pulseCounter === 4 && fever === true) {
+        sequence4();
+        pulseCounter=1;
         checkSequence();
     }
-})
+},750)
 
-//finish mechanics (Mon)
-//add music (mon)
-//create intro stories (tues)
-//create animation(wed)
+
+
+
+
+
+
+
+
+
+// var log = function() {
+//     console.log(playerSequence);
+
+// }
+
+
+
+//finish mechanics (Mon morn)
+//add music (mon afternoon) + makeshift reward screens (for MVP preso)
+//create intro stories (mon night)
+//create animation(tue)
