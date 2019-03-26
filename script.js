@@ -1,137 +1,133 @@
 var playerSequence = [];
+var playerTiming = [];
+var displayAccuracy;
+var feverMeter = 0;
 var fever = false;
 var pulseCounter = 1;
+var level = 1;
+var score = 0
 
-var A = String.fromCharCode(65);
-var S = String.fromCharCode(83);
-var K = String.fromCharCode(75);
-var L = String.fromCharCode(76);
+var A = 65//String.fromCharCode(65);
+var S = 83//String.fromCharCode(83);
+var K = 75//String.fromCharCode(75);
+var L = 76//String.fromCharCode(76);
 
 var moveBook = [
 {
-    moveName: "increase the temperature!",
+    moveName: "burger bun",
     keyStroke: [A,A,A,A],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: false,
+    img: "file:///Users/ll/GeneralAssembly/project1/images/top-bun.png",
 },
 {
-    moveName: "light the fire!!",
-    keyStroke: [A,A,A,A],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: true,
+    moveName: "bottom bun",
+    keyStroke:[A,A,A,A],
+    img:"file:///Users/ll/GeneralAssembly/project1/images/bottom-bun.png",
 },
 {
-    moveName: "stir the soup! decrease the temperature",
+    moveName: "lettuce",
+    keyStroke: [S,S,S,S],
+    img: "file:///Users/ll/GeneralAssembly/project1/images/lettuce.png",
+},
+{
+    moveName: "tomato",
     keyStroke: [L,L,L,L],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: false,
+    img: "file:///Users/ll/GeneralAssembly/project1/images/tomato.png",
 },
 {
-    moveName: "dinner is served!!",
-    keyStroke: [L,A,L,A],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: true,
-},
-{
-    moveName: "chop the ingredients!",
+    moveName: "cheese",
     keyStroke: [K,K,K,K],
-    referenceTiming:[0,750,1500,2250],
-    feverRequired: false,
+    img: "file:///Users/ll/GeneralAssembly/project1/images/cheese.png",
 },
 {
-    moveName: "add the ingredients!",
-    keyStroke: [A,S,K,A],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: true,
-},
-{
-    moveName: "season the ingredients!",
-    keyStroke: [L,L,L,L],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: false,
-},
-{
-    moveName: "give the ingredients a toss!",
+    moveName: "patty",
     keyStroke: [A,S,K,L],
-    referenceTiming: [0,750,1500,2250],
-    feverRequired: true,
+    img: "file:///Users/ll/GeneralAssembly/project1/images/patty.png",
 }
 ]
+
+//creating randomised game board
+//6 different pictures
+
+var random =function(){
+    return Math.floor(Math.random() * 4)+2;
+}
+
+var genCards = function() {
+    var cards = document.getElementsByClassName("card1")
+    for (var i=0; i<document.getElementsByClassName("card1").length; i++)
+        var genPic = document.createElement("img");
+        genPic.setAttribute("src",moveBook[random()].img);
+        genPic.setAttribute("opacity","0.2");// fix this shit
+        cards[0].appendChild(genPic); //fix this shit with i
+}
+
+genCards();
+
+//comparing sequence
+var checkSequence =function() {
+    console.log("checking sequence now");
+    var sequenceCorrect = [];
+//fever meter check
+    if (feverMeter >= 10) {
+        fever = true;
+    } else {
+        fever = false;
+    }
+
+//which move was used?
+    for (var i=0; i<moveBook.length; i++) {
+        for(var j=0; j<4; j++) {
+            if(parseInt(playerSequence[j].keyStroke) === parseInt(moveBook[i].keyStroke[j])){
+                sequenceCorrect.push(true);
+            } else {
+                sequenceCorrect.push(false);
+            }
+        }
+        if(!(sequenceCorrect.includes(false))){
+            console.log(moveBook[i].moveName);
+            if(moveBook[i].img === document.getElementsByClassName("card1")[0].children[0].src) {
+                document.getElementsByClassName("card1")[0].removeChild(document.getElementsByClassName("card1")[0].children[0]);
+                score+=1
+                $("#score").text("Score:" + score);
+                genCards();
+            }
+
+
+            console.log("IF STREAK, down fever") // TO BE UPDATEDDDDDD
+        }
+        sequenceCorrect=[];
+    }
+}
 
 // recording keystrokes
 var listener = function () {
     var recordListen = document.addEventListener("keydown",function(evt) {
-        playerSequence.push({"keyStroke":evt.which,"timeStamp":Math.round(evt.timeStamp)});
-    })
-}
+//following code relating to keydown keystroke is executed every time a key pressed
+        playerSequence.push({"keyStroke":evt.which});
+        if (playerSequence.length === 4) {
+            checkSequence();
+        }
+        // console.log(playerSequence[0].keyStroke);
+//following code relating to keydown timing is executed every time a key is pressed
+        playerTiming = ({"timeStamp":Math.round(evt.timeStamp%750)});
+        if (playerTiming.timeStamp <= 20 || playerTiming.timeStamp >= 730) {
+            displayAccuracy = "perfect!!";
+            feverMeter += 3;
+        } else if (playerTiming.timeStamp <= 60 || playerTiming.timeStamp >= 690) {
+            displayAccuracy = "great!";
+            feverMeter += 1;
+        } else if (playerTiming.timeStamp <= 180 || playerTiming.timeStamp >= 570) {
+            displayAccuracy = "meh -_-";
+            feverMeter -= 1;
+        } else {
+            displayAccuracy = "miss =(";
+            feverMeter -= 3;
+        }
+        console.log(playerTiming.timeStamp + ", " + displayAccuracy + ", " +feverMeter);
+        $("#hotStreak").text("Hot Streak:" + feverMeter);
+})}
 
 listener();
-
-//comparing sequence
-// var checkSequence =function() {
-//     var playerKeystrokeMatch = [];
-//     var firstKeystroke = [];
-//     var restKeystroke = [];
-//     var moveMatched = "";
-//     var moveDeviationTotal = [];
-//     var DeviationAll = "";
-// //do the keystrokes match?
-//     for (var i=0; i<moveBook.length; i++){
-//         for(var j=0; playerSequence.keyStroke.length; j++) {
-//             if(playerSequence.keyStroke[j] === moveBook[i].keyStroke[j]){
-//                 moveMatched = i
-//                 var playerKeystrokeMatch = true;
-//             } else {
-//                 var playerKeystrokeMatch = false;
-//             }
-//         }
-//     }
-// //does the first timings match?
-//     var remainder = playerSequence[0]%750
-//     if(remainder >= 730 || remainder <= 20) {
-//         firstKeystroke = "perfect";
-//     } else if (remainder >= 600 || remainder <= 150) {
-//         firstKeystroke = "ok";
-//     } else {
-//         firstKeystroke = "miss";
-//     }
-// // //do the rest of the timings match?
-//     for (var i=playerSequence.timeStamp.length-1; i=0; i--){
-//         playerSequence.timeStamp[i] = playerSequence.timeStamp[i] - playerSequence.timeStamp[0];
-//         var moveDeviation = playerSequence.timestamp[i] - moveBook[moveMatched][i];
-//         if (moveDeviation+remainder >= 730 || moveDeviation+remainder <= 20) {
-//             moveDeviationTotal.push("perfect");
-//         } else if (moveDeviation+remainder >= 600 || moveDeviation+remainder <= 150) {
-//             moveDeviationTotal.push("ok");
-//         } else {
-//             moveDeviationTotal.push("miss");
-//         }
-//     }
-//     function isPerfect(value){
-//         return value === "perfect";
-//     }
-//     deviationAll = moveDeviationTotal.every(isPerfect);
-// //evaluating all three conditions
-//     if(firstKeystroke === "perfect" && deviationAll === true){
-//         fever = true;
-//     } else if ()
-
-//     }
-
-
-// function isBelowThreshold(currentValue) {
-//   return currentValue < 40;
-// }
-
-// var array1 = [1, 30, 39, 29, 10, 13];
-
-// console.log(array1.every(isBelowThreshold));
-// // expected output: true
-
-
-
-// }
-
 
 //pulse
 var sequence1 = function () {
@@ -172,8 +168,7 @@ var startPulse = setInterval (function() {
     } else if (pulseCounter === 4 && fever === false) {
         sequence2();
         pulseCounter=1;
-        console.log(playerSequence);
-        // checkSequence();
+
     } else if (pulseCounter === 1 && fever === true) {
         playerSequence = [];
         sequence3();
@@ -187,7 +182,6 @@ var startPulse = setInterval (function() {
     } else if (pulseCounter === 4 && fever === true) {
         sequence4();
         pulseCounter=1;
-        checkSequence();
     }
 },750)
 
@@ -200,14 +194,6 @@ var startPulse = setInterval (function() {
 
 
 
-// var log = function() {
-//     console.log(playerSequence);
-
-// }
-
-
-
-//finish mechanics (Mon morn)
 //add music (mon afternoon) + makeshift reward screens (for MVP preso)
 //create intro stories (mon night)
 //create animation(tue)
