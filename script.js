@@ -139,7 +139,7 @@ var checkSequence =function() {
         fever = false;
     }
 //refresh the current level
-level = score/3;
+level = Math.floor(score+1);
 //which move was used?
     for (var i=0; i<moveBook.length; i++) {
         for(var j=0; j<4; j++) { //checking every 4 keystrokes
@@ -170,22 +170,25 @@ level = score/3;
             }
         }
     }
+
     tabScore();
 }
 
 //timer
-var timeLeft = 45;
+var timeLeft = 60;
 var timeLapse = function() {
     timeLeft--;
     $("#timer").text("Time left: " + timeLeft);
 }
 var startCountdown = function () {
     var timer = setInterval(timeLapse,1000);
-    if(timeLeft <= 0) {
-        var stopTimer = function () {
-                clearInterval(timer); //doesn't seem to work, check
-            }
-        }
+}
+
+var endSequence = function() {
+    $("#endMessage").text("You bashed " + score+ " burgers!");
+    document.querySelectorAll(".playingArea")[0].style.display="none";
+    document.querySelectorAll(".playingCanvas")[0].style.display="none";
+    document.querySelectorAll(".endingScreen")[0].style.display="block";
 }
 
 //scoring mechanic
@@ -211,6 +214,7 @@ var tabScore = function() {
         (row4Empty === 0 && !condition4)) {
         score++;
         $("#score").text("Score: " + score);
+        timeLeft +=5;
         genCards();
     }
     row1Empty = 0;
@@ -246,10 +250,14 @@ var listener = function () {
         }
         console.log(playerTiming.timeStamp + ", " + displayAccuracy + ", " +feverMeter);
         $("#hotStreak").text("Hot Streak:" + feverMeter);
+        //checking for end sequence
+        if (timeLeft<=0){
+            endSequence()
+        }
 })}
 
 //audio
-var loop = new Audio('sounds/loop2.wav');
+var loop = new Audio('sounds/loop3.wav');
 
 //pulse
 var sequence1 = function () {
@@ -288,9 +296,9 @@ document.getElementById("start").addEventListener("click",function(){
 
     startCountdown();
 
-    // var musicLoop = setTimeout (function() {
-    //     loop.play();
-    // },780)
+    var musicLoop = setTimeout (function() {
+        loop.play();
+    },780)
 
     var startPulse = setInterval (function() {
         if(pulseCounter === 1 && fever === false){
@@ -324,11 +332,13 @@ document.getElementById("start").addEventListener("click",function(){
     },750)
 });
 
-
+//restart game
+document.getElementById("restart").addEventListener("click",function(){
+    window.location.reload()
+})
 
 
 //to do
-//score counter
 //ending screen
 
 

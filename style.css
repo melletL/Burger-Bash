@@ -31,6 +31,19 @@ body{
 	display:none;
 }
 
+.endingScreen {
+	width:1024px;
+	height:700px;
+	margin: 10px auto;
+	border: 1px dashed rgb(240, 238, 238,0.2);
+	text-align:center;
+	display:none;
+}
+
+#endMessage {
+	margin:150px auto;
+}
+
 ul {
 	margin: 40px 0 0 20px;
 }
