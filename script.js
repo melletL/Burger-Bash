@@ -4,64 +4,118 @@ var displayAccuracy;
 var feverMeter = 0;
 var fever = false;
 var pulseCounter = 1;
-var level = 1;
 var score = 0
+var level = 1;
 
-var A = 65//String.fromCharCode(65);
-var S = 83//String.fromCharCode(83);
-var K = 75//String.fromCharCode(75);
-var L = 76//String.fromCharCode(76);
+//String.fromCharCode(76);
+var B = 66;
+var C = 67;
+var L = 76;
+var P = 80;
+var T = 84;
 
 var moveBook = [
 {
-    moveName: "burger bun",
-    keyStroke: [A,A,A,A],
+    moveName: "bun",
+    keyStroke: [B,B,B,B],
     img: "file:///Users/ll/GeneralAssembly/project1/images/top-bun.png",
 },
 {
-    moveName: "bottom bun",
-    keyStroke:[A,A,A,A],
+    moveName: "bun",
+    keyStroke:[B,B,B,B],
     img:"file:///Users/ll/GeneralAssembly/project1/images/bottom-bun.png",
 },
 {
     moveName: "lettuce",
-    keyStroke: [S,S,S,S],
+    keyStroke: [L,L,L,L],
     img: "file:///Users/ll/GeneralAssembly/project1/images/lettuce.png",
 },
 {
     moveName: "tomato",
-    keyStroke: [L,L,L,L],
+    keyStroke: [T,T,T,T],
     img: "file:///Users/ll/GeneralAssembly/project1/images/tomato.png",
 },
 {
     moveName: "cheese",
-    keyStroke: [K,K,K,K],
+    keyStroke: [C,C,C,C],
     img: "file:///Users/ll/GeneralAssembly/project1/images/cheese.png",
 },
 {
     moveName: "patty",
-    keyStroke: [A,S,K,L],
+    keyStroke: [P,P,P,P],
     img: "file:///Users/ll/GeneralAssembly/project1/images/patty.png",
 }
 ]
 
 //creating randomised game board
-//6 different pictures
 
 var random =function(){
     return Math.floor(Math.random() * 4)+2;
 }
 
 var genCards = function() {
-    var cards = document.getElementsByClassName("card1")
-    for (var i=0; i<document.getElementsByClassName("card1").length; i++)
+    var cards = document.getElementsByClassName("card");
+    var cardArrRandom = [];
+    var cardArrRandomIdentity = [];
+//creates an array of random card images based on difficulty
+    for (var i=0; i<(2*level-1); i++) {
+        cardArrRandom.push(moveBook[random()].img);
+    }
+//maps random card image created to their identity
+    for (var i=0; i<cardArrRandom.length; i++){
+        for (var j=0; j<moveBook.length;j++)
+            if (cardArrRandom[i] === moveBook[j].img){
+                cardArrRandomIdentity.push(moveBook[j].moveName);
+            }
+    }
+//tags empty cards
+    for (var i=0; i<4; i++){
+        var emptyBucket = [];
+        for (var j=0; j<6; j++){
+            if(document.getElementsByClassName("rowContainer")[i+1].children[j].children.length === 0) {
+                emptyBucket.push(true);
+            } else {
+                emptyBucket.push(false);
+            }
+        }
+        if(!(emptyBucket.includes(false))){
+            for (var k=0; k<6; k++){
+                document.getElementsByClassName("rowContainer")[i+1].children[k].classList.add("empty");
+            }
+        } else if (emptyBucket.includes(false)) {
+            for (var k=0; k<6; k++){
+                document.getElementsByClassName("rowContainer")[i+1].children[k].classList.remove("empty");
+            }
+        }
+    }
+//creates new img element, adds image and class name, and appends to first empty card div of next empty container
+    for (var i=0; i<cardArrRandom.length; i++){
         var genPic = document.createElement("img");
-        genPic.setAttribute("src",moveBook[random()].img);
-        genPic.setAttribute("opacity","0.2");// fix this shit
-        cards[0].appendChild(genPic); //fix this shit with i
+        genPic.setAttribute("src",cardArrRandom[i]);
+        genPic.classList.add(cardArrRandomIdentity[i]);
+        document.getElementsByClassName("empty card")[i].appendChild(genPic);
+    }
+//add top bun and bottom bun
+    for (var i=0; i<4; i++){
+        if (document.getElementsByClassName("rowContainer")[i+1].children[1].children.length !== 0 && document.getElementsByClassName("rowContainer")[i+1].children[1].className.includes("empty")) {
+            var genPic = document.createElement("img");
+            genPic.setAttribute("src",moveBook[0].img);
+            genPic.classList.add("bun");
+            document.getElementsByClassName("cardStart")[i].appendChild(genPic);
+            var genPic = document.createElement("img");
+            genPic.setAttribute("src",moveBook[1].img);
+            genPic.classList.add("bun");
+            for (var j=4; j>=0; j--){
+                if(document.getElementsByClassName("rowContainer")[i+1].children[j+1].children.length === 0) {
+                    document.getElementsByClassName("rowContainer")[i+1].children[j+1].appendChild(genPic);
+                }
+            }
+        }
+    }
 }
 
-genCards();
+// var genCardsInterval = setInterval(genCards,9000)
+
 
 //comparing sequence
 var checkSequence =function() {
@@ -73,7 +127,7 @@ var checkSequence =function() {
     } else {
         fever = false;
     }
-
+level = score/3
 //which move was used?
     for (var i=0; i<moveBook.length; i++) {
         for(var j=0; j<4; j++) {
@@ -84,26 +138,34 @@ var checkSequence =function() {
             }
         }
         if(!(sequenceCorrect.includes(false))){
-            console.log(moveBook[i].moveName);
-            if(moveBook[i].img === document.getElementsByClassName("card1")[0].children[0].src) {
-                document.getElementsByClassName("card1")[0].removeChild(document.getElementsByClassName("card1")[0].children[0]);
-                score+=1
-                $("#score").text("Score:" + score);
-                genCards();
+            console.log(moveBook[i].moveName)
+            if(fever === false) {
+                document.getElementsByClassName(moveBook[i].moveName)[0].parentNode.removeChild(document.getElementsByClassName(moveBook[i].moveName)[0]);
+            } else if (fever === true) {
+                for (var j=0; j<3; j++){
+                    document.getElementsByClassName(moveBook[i].moveName)[j].parentNode.removeChild(document.getElementsByClassName(moveBook[i].moveName)[j]);
+                }
             }
-
-
-            console.log("IF STREAK, down fever") // TO BE UPDATEDDDDDD
+            // score+=1;
+            // $("#score").text("Score:" + score);
+            // sequenceCorrect=[];
         }
-        sequenceCorrect=[];
     }
 }
+
+
+
+
+                // genCards();
+
+
 
 // recording keystrokes
 var listener = function () {
     var recordListen = document.addEventListener("keydown",function(evt) {
 //following code relating to keydown keystroke is executed every time a key pressed
         playerSequence.push({"keyStroke":evt.which});
+        console.log(playerSequence);
         if (playerSequence.length === 4) {
             checkSequence();
         }
@@ -130,6 +192,8 @@ var listener = function () {
 listener();
 
 //pulse
+// var Loop = new Audio('sounds/loop.wav');
+
 var sequence1 = function () {
     document.getElementsByClassName('playingCanvas')[0].id = 'pulse1';
     $("#pulse1").fadeIn(1);
@@ -185,15 +249,23 @@ var startPulse = setInterval (function() {
     }
 },750)
 
+// var musicLoop = setInterval (function() {
+//     Loop.play();
+// },0)
 
 
 
 
 
+//complete game mechanic
+//countdown timer
+//add starting screen
+//add random confusers
+//add music
 
-
-
-
-//add music (mon afternoon) + makeshift reward screens (for MVP preso)
-//create intro stories (mon night)
-//create animation(tue)
+//on load
+//start timer
+//start music
+//genCards
+//start flashing
+//ask Akira how to do this

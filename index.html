@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
+     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
     <title></title>
 </head>
 <body>
     <div class="playingArea">
-        <h1 id="score">Score: 0</h1>
-        <h1 id="timer">Time left: 60</h1>
-        <h3 id="hotStreak">Hot Streak: 0</h3>
-        <div class="container1"></div>
-            <div class="card1"></div>
-            <div class="card1"></div>
-            <div class="card1"></div>
-            <div class="card1"></div>
-            <div class="card1"></div>
-            <div class="card1"></div>
+        <div class="rowContainer rowHead">
+            <h2 id="score">Score: 0</h2>
+            <h1 id= "title">B[U]RGER BASH</h1>
+            <h2 id="timer">Time left: 60</h2>
         </div>
-<!--         <div class="container"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
+        <div>
+            <h3 id="hotStreak">Hot Streak: 0</h3>
         </div>
-        <div class="container"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-        </div> -->
+
+        <div class="rowContainer row1">
+            <div class="cardStart card1"></div>
+            <div class="card card1"></div>
+            <div class="card card1"></div>
+            <div class="card card1"></div>
+            <div class="card card1"></div>
+            <div class="cardEnd card1"></div>
+        </div>
+
+        <div class="rowContainer row2">
+            <div class="cardStart card2"></div>
+            <div class="card card2"></div>
+            <div class="card card2"></div>
+            <div class="card card2"></div>
+            <div class="card card2"></div>
+            <div class="cardEnd card2"></div>
+        </div>
+
+        <div class="rowContainer row3">
+            <div class="cardStart card3"></div>
+            <div class="card card3"></div>
+            <div class="card card3"></div>
+            <div class="card card3"></div>
+            <div class="card card3"></div>
+            <div class="cardEnd card3"></div>
+        </div>
+
+        <div class="rowContainer row4">
+            <div class="cardStart card4"></div>
+            <div class="card card4"></div>
+            <div class="card card4"></div>
+            <div class="card card4"></div>
+            <div class="card card4"></div>
+            <div class="cardEnd card4"></div>
+        </div>
     </div>
     <div class="playingCanvas"></div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="script.js"></script>
 </body>
