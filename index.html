@@ -2,22 +2,81 @@
 <html>
 <head>
      <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
     <title></title>
 </head>
 <body>
+    <div class="introPage">
+        <div class="introBanner">
+            <h4>B[U]RGER BASH is a rhythm and reaction game!</h4>
+        </div>
+        <div class="bottomHalf">
+            <div class="leftColumn">
+                <div class="leftColumnTop">
+                    <h5>Instructions:</h5>
+                </div>
+                <div class="leftColumnBot">
+                    <ul>
+                        <li>Random ingredients will spawn on the screen in increasing complexity.</li>
+                        <li>Your goal is to remove them from play by <span class="yellow"> keying in 4 beats of the ingredient’s first alphabet</span>, in sync with the flashing rhythm.</li>
+                        <li>Hot streaks build up when you <span class="yellow">catch the beat perfectly</span>, allowing you to remove multiple instances of ingredients at a go.</li>
+                        <li>Good luck and happy <span class="yellow">Burger Bashing!!</span> </li>
+                    </ul>
+                    <div class="leftColumnBott">
+                        <button id="start">Start</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rightColumn">
+
+                <div class="rightColumnTop">
+                    <div class="topRowNestedRightColumn"><h5>Ingredients are:</h5></div>
+                </div>
+
+                <div class="rightColumnBot">
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p><span class="firstAlpha">[B]</span>un </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/top-bun.png"></div>
+                    </div>
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p><span class="firstAlpha">[T]</span>omato </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/tomato.png"></div>
+                    </div>
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p><span class="firstAlpha">[L]</span>ettuce </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/lettuce.png"></div>
+                    </div>
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p><span class="firstAlpha">[C]</span>heese </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/cheese.png"></div>
+                    </div>
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p><span class="firstAlpha">[P]</span>atty </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/patty.png"></div>
+                    </div>
+                    <div class="rightColumnBotVert">
+                        <div class="rightColumnThing"><p>also a <span class="firstAlpha">[B]</span>un  </p></div>
+                        <div class="rightColumnThing"><img class="new" src="images/bottom-bun.png"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="playingArea">
         <div class="rowContainer rowHead">
             <h2 id="score">Score: 0</h2>
             <h1 id= "title">B[U]RGER BASH</h1>
-            <h2 id="timer">Time left: 60</h2>
+            <h2 id="timer">Time left: 45</h2>
         </div>
         <div>
             <h3 id="hotStreak">Hot Streak: 0</h3>
         </div>
 
         <div class="rowContainer row1">
-            <div class="cardStart card1"></div>
+            <div class="cardStart card1 fresh"></div>
             <div class="card card1"></div>
             <div class="card card1"></div>
             <div class="card card1"></div>
@@ -26,7 +85,7 @@
         </div>
 
         <div class="rowContainer row2">
-            <div class="cardStart card2"></div>
+            <div class="cardStart card2 fresh"></div>
             <div class="card card2"></div>
             <div class="card card2"></div>
             <div class="card card2"></div>
@@ -35,7 +94,7 @@
         </div>
 
         <div class="rowContainer row3">
-            <div class="cardStart card3"></div>
+            <div class="cardStart card3 fresh"></div>
             <div class="card card3"></div>
             <div class="card card3"></div>
             <div class="card card3"></div>
@@ -44,7 +103,7 @@
         </div>
 
         <div class="rowContainer row4">
-            <div class="cardStart card4"></div>
+            <div class="cardStart card4 fresh"></div>
             <div class="card card4"></div>
             <div class="card card4"></div>
             <div class="card card4"></div>

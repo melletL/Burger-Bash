@@ -5,7 +5,7 @@ var feverMeter = 0;
 var fever = false;
 var pulseCounter = 1;
 var score = 0
-var level = 1;
+var level = Math.floor(score/3)+1;
 
 //String.fromCharCode(76);
 var B = 66;
@@ -18,108 +18,119 @@ var moveBook = [
 {
     moveName: "bun",
     keyStroke: [B,B,B,B],
-    img: "file:///Users/ll/GeneralAssembly/project1/images/top-bun.png",
+    img: "images/top-bun.png",
 },
 {
     moveName: "bun",
     keyStroke:[B,B,B,B],
-    img:"file:///Users/ll/GeneralAssembly/project1/images/bottom-bun.png",
+    img:"images/bottom-bun.png",
 },
 {
     moveName: "lettuce",
     keyStroke: [L,L,L,L],
-    img: "file:///Users/ll/GeneralAssembly/project1/images/lettuce.png",
+    img: "images/lettuce.png",
 },
 {
     moveName: "tomato",
     keyStroke: [T,T,T,T],
-    img: "file:///Users/ll/GeneralAssembly/project1/images/tomato.png",
+    img: "images/tomato.png",
 },
 {
     moveName: "cheese",
     keyStroke: [C,C,C,C],
-    img: "file:///Users/ll/GeneralAssembly/project1/images/cheese.png",
+    img: "images/cheese.png",
 },
 {
     moveName: "patty",
     keyStroke: [P,P,P,P],
-    img: "file:///Users/ll/GeneralAssembly/project1/images/patty.png",
+    img: "images/patty.png",
 }
 ]
 
 //creating randomised game board
 
 var random =function(){
-    return Math.floor(Math.random() * 4)+2;
+    console.log("Random is called")
+    return (Math.floor(Math.random() * 4)+2);
 }
 
 var genCards = function() {
-    var cards = document.getElementsByClassName("card");
+    var cards = document.querySelectorAll(".card");
     var cardArrRandom = [];
     var cardArrRandomIdentity = [];
 //creates an array of random card images based on difficulty
     for (var i=0; i<(2*level-1); i++) {
+        console.log("Random being used here")
         cardArrRandom.push(moveBook[random()].img);
+        console.log("random done being used here")
     }
 //maps random card image created to their identity
-    for (var i=0; i<cardArrRandom.length; i++){
-        for (var j=0; j<moveBook.length;j++)
-            if (cardArrRandom[i] === moveBook[j].img){
+    for (var i=0; i<cardArrRandom.length; i++) {
+        for (var j=0; j<moveBook.length;j++) {
+            if (cardArrRandom[i] === moveBook[j].img) {
                 cardArrRandomIdentity.push(moveBook[j].moveName);
             }
+        }
     }
 //tags empty cards
-    for (var i=0; i<4; i++){
+    var rowContainer = document.querySelectorAll(".rowContainer");
+    for (var i=0; i<(rowContainer.length-1); i++) { //number of card containers less the header container
         var emptyBucket = [];
-        for (var j=0; j<6; j++){
-            if(document.getElementsByClassName("rowContainer")[i+1].children[j].children.length === 0) {
+        for (var j=0; j<document.querySelectorAll(".card1").length; j++) { //the number of cards in each container
+            if(rowContainer[i+1].children[j].children.length === 0) { //this scans whether there is img
                 emptyBucket.push(true);
             } else {
                 emptyBucket.push(false);
             }
         }
-        if(!(emptyBucket.includes(false))){
-            for (var k=0; k<6; k++){
-                document.getElementsByClassName("rowContainer")[i+1].children[k].classList.add("empty");
+        if(!(emptyBucket.includes(false))) { //all the buckets are empty
+            for (var k=0; k<document.querySelectorAll(".card1").length; k++) {
+                rowContainer[i+1].children[k].classList.add("empty");
             }
-        } else if (emptyBucket.includes(false)) {
-            for (var k=0; k<6; k++){
-                document.getElementsByClassName("rowContainer")[i+1].children[k].classList.remove("empty");
+        } else if (emptyBucket.includes(false)) { //at least one of the bucket is filled
+            for (var k=0; k<document.querySelectorAll(".card1").length; k++) {
+                rowContainer[i+1].children[k].classList.remove("empty");
             }
         }
     }
 //creates new img element, adds image and class name, and appends to first empty card div of next empty container
-    for (var i=0; i<cardArrRandom.length; i++){
+    var emptyContainer = document.querySelectorAll(".empty.card");
+    for (var i=0; i<Math.min(cardArrRandom.length,emptyContainer.length) ; i++) {
         var genPic = document.createElement("img");
         genPic.setAttribute("src",cardArrRandom[i]);
         genPic.classList.add(cardArrRandomIdentity[i]);
-        document.getElementsByClassName("empty card")[i].appendChild(genPic);
+        emptyContainer[i].appendChild(genPic);
     }
 //add top bun and bottom bun
-    for (var i=0; i<4; i++){
-        if (document.getElementsByClassName("rowContainer")[i+1].children[1].children.length !== 0 && document.getElementsByClassName("rowContainer")[i+1].children[1].className.includes("empty")) {
+    var cardStart = document.querySelectorAll(".cardStart")
+    for (var i=0; i<(rowContainer.length-1); i++) { //number of card containers less the header container
+        if (rowContainer[i+1].children[1].children.length !== 0 && rowContainer[i+1].children[1].className.includes("empty")) {
             var genPic = document.createElement("img");
             genPic.setAttribute("src",moveBook[0].img);
             genPic.classList.add("bun");
-            document.getElementsByClassName("cardStart")[i].appendChild(genPic);
+            cardStart[i].appendChild(genPic);
+
             var genPic = document.createElement("img");
             genPic.setAttribute("src",moveBook[1].img);
             genPic.classList.add("bun");
-            for (var j=4; j>=0; j--){
-                if(document.getElementsByClassName("rowContainer")[i+1].children[j+1].children.length === 0) {
-                    document.getElementsByClassName("rowContainer")[i+1].children[j+1].appendChild(genPic);
+            for (var j=(document.querySelectorAll(".card1").length-2); j>=0; j--) {
+            // checking through possible empty locations, less the starting card
+                if(rowContainer[i+1].children[j+1].children.length === 0) {
+                    rowContainer[i+1].children[j+1].appendChild(genPic);
                 }
             }
         }
     }
+    for(var i=0; i<document.querySelectorAll(".fresh").length; i++){
+        if (document.querySelectorAll(".fresh")[i].children.length !== 0){
+            document.querySelectorAll(".fresh")[i].classList.remove("fresh");
+        }
+    }
 }
-
-// var genCardsInterval = setInterval(genCards,9000)
-
 
 //comparing sequence
 var checkSequence =function() {
-    console.log("checking sequence now");
+    console.log("checking sequence now"); //not an essential line
     var sequenceCorrect = [];
 //fever meter check
     if (feverMeter >= 10) {
@@ -127,38 +138,86 @@ var checkSequence =function() {
     } else {
         fever = false;
     }
-level = score/3
+//refresh the current level
+level = score/3;
 //which move was used?
     for (var i=0; i<moveBook.length; i++) {
-        for(var j=0; j<4; j++) {
-            if(parseInt(playerSequence[j].keyStroke) === parseInt(moveBook[i].keyStroke[j])){
+        for(var j=0; j<4; j++) { //checking every 4 keystrokes
+            sequenceCorrect=[];
+            if(playerSequence[j].keyStroke === moveBook[i].keyStroke[j]) {
                 sequenceCorrect.push(true);
             } else {
                 sequenceCorrect.push(false);
             }
         }
-        if(!(sequenceCorrect.includes(false))){
-            console.log(moveBook[i].moveName)
-            if(fever === false) {
-                document.getElementsByClassName(moveBook[i].moveName)[0].parentNode.removeChild(document.getElementsByClassName(moveBook[i].moveName)[0]);
-            } else if (fever === true) {
-                for (var j=0; j<3; j++){
-                    document.getElementsByClassName(moveBook[i].moveName)[j].parentNode.removeChild(document.getElementsByClassName(moveBook[i].moveName)[j]);
+        var name = moveBook[i].moveName;
+        var objectsWithName = document.getElementsByClassName(name);
+        if(!(sequenceCorrect.includes(false))){ // this matches one of the moves in the moveBook
+            console.log(moveBook[i].moveName) // not an essential line of code
+            if(feverMeter <= 10) { //fever is less than 10, remove first matching object
+                objectsWithName[0].parentNode.removeChild(objectsWithName[0]);
+            } else if (feverMeter > 10) { //fever more than 10, remove up to 3 matching objects
+                var counter = 3;
+                for (var k=0; k<objectsWithName.length; k++) {
+                    if(objectsWithName.length >0 ) {
+                        objectsWithName[k].parentNode.removeChild(objectsWithName[k]);;
+                        counter--;
+                    }
+                    if (counter === 0) {
+                        break;
+                    }
                 }
             }
-            // score+=1;
-            // $("#score").text("Score:" + score);
-            // sequenceCorrect=[];
         }
     }
+    tabScore();
 }
 
+//timer
+var timeLeft = 45;
+var timeLapse = function() {
+    timeLeft--;
+    $("#timer").text("Time left: " + timeLeft);
+}
+var startCountdown = function () {
+    var timer = setInterval(timeLapse,1000);
+    if(timeLeft <= 0) {
+        var stopTimer = function () {
+                clearInterval(timer); //doesn't seem to work, check
+            }
+        }
+}
 
+//scoring mechanic
+var row1Empty = 0;
+var row2Empty = 0;
+var row3Empty = 0;
+var row4Empty = 0;
 
-
-                // genCards();
-
-
+var tabScore = function() {
+    for (var i=0; i<document.querySelectorAll(".card1").length; i++) {
+        row1Empty += document.querySelectorAll(".card1")[i].children.length;
+        row2Empty += document.querySelectorAll(".card2")[i].children.length;
+        row3Empty += document.querySelectorAll(".card3")[i].children.length;
+        row4Empty += document.querySelectorAll(".card4")[i].children.length;
+    }
+    var condition1 = document.querySelectorAll(".cardStart.card1")[0].classList.contains("fresh");
+    var condition2 = document.querySelectorAll(".cardStart.card2")[0].classList.contains("fresh");
+    var condition3 = document.querySelectorAll(".cardStart.card3")[0].classList.contains("fresh");
+    var condition4 = document.querySelectorAll(".cardStart.card4")[0].classList.contains("fresh");
+    if ((row1Empty === 0 && !condition1) ||
+        (row2Empty === 0 && !condition2) ||
+        (row3Empty === 0 && !condition3) ||
+        (row4Empty === 0 && !condition4)) {
+        score++;
+        $("#score").text("Score: " + score);
+        genCards();
+    }
+    row1Empty = 0;
+    row2Empty = 0;
+    row3Empty = 0;
+    row4Empty = 0;
+}
 
 // recording keystrokes
 var listener = function () {
@@ -189,11 +248,10 @@ var listener = function () {
         $("#hotStreak").text("Hot Streak:" + feverMeter);
 })}
 
-listener();
+//audio
+var loop = new Audio('sounds/loop2.wav');
 
 //pulse
-// var Loop = new Audio('sounds/loop.wav');
-
 var sequence1 = function () {
     document.getElementsByClassName('playingCanvas')[0].id = 'pulse1';
     $("#pulse1").fadeIn(1);
@@ -218,54 +276,63 @@ var sequence4 = function () {
     $("#pulse4").fadeOut(500);
 }
 
-var startPulse = setInterval (function() {
-    if(pulseCounter === 1 && fever === false){
-        playerSequence = [];
-        sequence1();
-        pulseCounter++
-    } else if (pulseCounter ===2 && fever === false ) {
-        sequence2();
-        pulseCounter++;
-    } else if (pulseCounter ===3 && fever === false ) {
-        sequence2();
-        pulseCounter++;
-    } else if (pulseCounter === 4 && fever === false) {
-        sequence2();
-        pulseCounter=1;
+//game init
+document.getElementById("start").addEventListener("click",function(){
+    document.querySelectorAll(".introPage")[0].style.display="none";
+    document.querySelectorAll(".playingArea")[0].style.display="block";
+    document.querySelectorAll(".playingCanvas")[0].style.display="flex";
 
-    } else if (pulseCounter === 1 && fever === true) {
-        playerSequence = [];
-        sequence3();
-        pulseCounter++
-    } else if (pulseCounter ===2 && fever === true ) {
-        sequence4();
-        pulseCounter++;
-    } else if (pulseCounter ===3 && fever === true ) {
-        sequence4();
-        pulseCounter++;
-    } else if (pulseCounter === 4 && fever === true) {
-        sequence4();
-        pulseCounter=1;
-    }
-},750)
+    listener();
 
-// var musicLoop = setInterval (function() {
-//     Loop.play();
-// },0)
+    var delayStart = setTimeout(genCards,750);
+
+    startCountdown();
+
+    // var musicLoop = setTimeout (function() {
+    //     loop.play();
+    // },780)
+
+    var startPulse = setInterval (function() {
+        if(pulseCounter === 1 && fever === false){
+            playerSequence = [];
+            sequence1();
+            pulseCounter++
+        } else if (pulseCounter ===2 && fever === false ) {
+            sequence2();
+            pulseCounter++;
+        } else if (pulseCounter ===3 && fever === false ) {
+            sequence2();
+            pulseCounter++;
+        } else if (pulseCounter === 4 && fever === false) {
+            sequence2();
+            pulseCounter=1;
+
+        } else if (pulseCounter === 1 && fever === true) {
+            playerSequence = [];
+            sequence3();
+            pulseCounter++
+        } else if (pulseCounter ===2 && fever === true ) {
+            sequence4();
+            pulseCounter++;
+        } else if (pulseCounter ===3 && fever === true ) {
+            sequence4();
+            pulseCounter++;
+        } else if (pulseCounter === 4 && fever === true) {
+            sequence4();
+            pulseCounter=1;
+        }
+    },750)
+});
 
 
 
 
+//to do
+//score counter
+//ending screen
 
-//complete game mechanic
-//countdown timer
-//add starting screen
+
+//good to have
+//countdown timer (do a clock?)
+//graphics on demolition
 //add random confusers
-//add music
-
-//on load
-//start timer
-//start music
-//genCards
-//start flashing
-//ask Akira how to do this

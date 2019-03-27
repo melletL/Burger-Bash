@@ -4,17 +4,143 @@ body{
 	font-family: "helvetica";
 }
 
+/*div {
+	border:1px solid yellow;
+}*/
+
+.introPage{
+	width:1024px;
+	height:700px;
+	display:flex;
+	flex-direction: column;
+	border: 1px dashed rgb(240, 238, 238,0.2);
+	margin: 10px auto;
+}
+
 .playingArea {
-	/*display:flex;*/
-/*	flex-direction: column
-	flex-wrap:nowrap;
-	justify-content: center;
-	align-items: flex-start;*/
 	width:1024px;
 	height:700px;
 	margin: 10px auto;
 	border: 1px dashed rgb(240, 238, 238,0.2);
+	display:none;
 }
+
+.playingCanvas {
+	width:1024px;
+	margin: 5px auto;
+	display:none;
+}
+
+ul {
+	margin: 40px 0 0 20px;
+}
+
+li {
+	color:white;
+	font-size:16px;
+	margin:30px;
+	list-style-type: none;
+	letter-spacing: 1px;
+	line-height: 25px;
+}
+
+.yellow {
+	color:yellow;
+}
+
+button {
+	font-size: 36px;
+	letter-spacing: 5px;
+	padding:10px 30px;
+	margin: 25px;
+	background-color: yellow;
+	border-radius: 10%;
+}
+
+button:hover {
+	font-size: 36px;
+	letter-spacing: 5px;
+	padding:10px 30px;
+	margin: 25px;
+	background-color: red;
+	border-radius: 10%;
+}
+
+.leftColumnBott {
+	text-align:center;
+}
+
+.introBanner {
+	display:flex;
+}
+
+.bottomHalf {
+	display:flex;
+	flex-direction:row;
+}
+
+.leftColumn {
+	width:500px;
+}
+
+.rightColumn {
+	display:flex;
+	flex-direction: column;
+	width:520px;
+}
+
+.rightColumnBot {
+	flex-flow: column wrap;
+}
+
+.rightColumnBotVert {
+	display: flex;
+	flex-direction: row;
+	width:520px;
+}
+
+.rightColumnThing {
+	width:250px;
+	height:85px;
+}
+
+.new {
+	left:0;
+}
+
+.firstAlpha {
+	color:yellow;
+	margin: 0 5px;
+	font-size:30px;
+}
+
+h4 {
+	color:white;
+	margin:auto;
+	margin: 45px 0 15px 50px;
+	font-size:36px;
+	text-align: center;
+	letter-spacing: 2px;
+}
+
+h5 {
+	color:white;
+	font-size:26px;
+	margin:20px 0 20px 50px;
+	letter-spacing: 3px
+	/*font-family: 'Indie Flower', cursive;*/
+
+}
+
+p {
+	color:white;
+	margin:  10px 0 0 60px;
+	font-size:22px;
+	letter-spacing: 2px
+	/*font-family: 'Indie Flower', cursive;*/
+}
+
+
 
 h1 {
 	color:white;
@@ -54,10 +180,6 @@ h3 {
 	width:1024px;
 	height:100px;
 	margin:20px auto;
-	/*flex-direction:row;
-	flex-wrap:nowrap;
-	justify-content: center;
-	align-items: center;*/
 }
 
 .card1, .card2, .card3, .card4 {
@@ -66,10 +188,7 @@ h3 {
 	margin:5px;
 }
 
-.playingCanvas {
-	width:1024px;
-	margin: 5px auto;
-}
+
 
 #pulse1 {
 	z-index: 1;
