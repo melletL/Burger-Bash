@@ -243,10 +243,10 @@ var listener = function () {
             feverMeter += 1;
         } else if (playerTiming.timeStamp <= 180 || playerTiming.timeStamp >= 570) {
             displayAccuracy = "meh -_-";
-            feverMeter -= 1;
+            feverMeter += 0;
         } else {
             displayAccuracy = "miss =(";
-            feverMeter -= 3;
+            feverMeter -= 1;
         }
         console.log(playerTiming.timeStamp + ", " + displayAccuracy + ", " +feverMeter);
         $("#hotStreak").text("Hot Streak:" + feverMeter);
