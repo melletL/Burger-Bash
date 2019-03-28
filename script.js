@@ -246,7 +246,7 @@ var listener = function () {
             feverMeter += 0;
         } else {
             displayAccuracy = "miss =(";
-            feverMeter -= 1;
+            feverMeter += 0;
         }
         console.log(playerTiming.timeStamp + ", " + displayAccuracy + ", " +feverMeter);
         $("#hotStreak").text("Hot Streak:" + feverMeter);
